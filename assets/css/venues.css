@@ -1,0 +1,193 @@
+/* ===== 场地卡片模块（feature/venue-cards）=====
+ * 依赖共享层 tokens / base / components（.rise / .tag 直接复用）
+ * 色彩入口：每张卡片由 JS 在 style 上注入 --vc: var(--vN)
+ */
+
+#venue-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+
+@media (min-width: 640px) {
+  #venue-list { grid-template-columns: 1fr 1fr; }
+  /* 5 张卡片时最后一张独占一行，避免孤零零悬在半列 */
+  #venue-list .venue-card:nth-child(odd):last-child { grid-column: 1 / -1; }
+}
+
+/* ---------- 卡片骨架 ---------- */
+.venue-card {
+  --vc: var(--c-primary); /* 兜底，正常会被 JS 覆盖为 var(--v1..v5) */
+  display: flex;
+  flex-direction: column;
+  background: var(--c-surface);
+  border-radius: var(--r-l);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  border: 1px solid var(--c-line);
+}
+
+/* ---------- 头部：渐变 emoji 大图区 + 序号徽章 ---------- */
+.venue-card__hero {
+  position: relative;
+  min-height: 132px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* 纯色 vc 上叠一层白->透明->微暗，构成渐变层次，兼容所有浏览器 */
+  background:
+    linear-gradient(155deg, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0) 45%, rgba(0, 0, 0, 0.16) 100%),
+    var(--vc);
+}
+
+.venue-card__emoji {
+  font-size: 64px;
+  line-height: 1;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.22));
+}
+
+/* 超大序号徽章——朋友投票时报的就是这个号 */
+.venue-card__badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  min-width: 52px;
+  height: 52px;
+  padding: 0 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r-m);
+  background: rgba(255, 255, 255, 0.94);
+  color: var(--vc);
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1;
+  box-shadow: 0 3px 10px rgba(43, 33, 64, 0.18);
+}
+
+.venue-card__badge::before {
+  content: "方案";
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--c-ink);
+  border-radius: 999px;
+  padding: 1px 7px;
+  white-space: nowrap;
+}
+
+/* ---------- 标题区 ---------- */
+.venue-card__body {
+  padding: 16px 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.venue-card__name {
+  font-size: 18px;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+.venue-card__district {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--c-ink-soft);
+}
+
+.venue-card .tag {
+  background: var(--vc);
+  align-self: flex-start;
+}
+
+/* ---------- 信息行 ---------- */
+.venue-info {
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-top: 1px dashed var(--c-line);
+  padding-top: 12px;
+}
+
+.venue-info__row {
+  display: flex;
+  gap: 8px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.venue-info__row dt {
+  flex: 0 0 auto;
+  font-weight: 700;
+  color: var(--c-ink);
+  white-space: nowrap;
+}
+
+.venue-info__row dd {
+  flex: 1;
+  color: var(--c-ink-soft);
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+/* ---------- 底部：推荐语高亮条 + 投票按钮 + 来源 ---------- */
+.venue-card__foot {
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.venue-card__verdict {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--c-ink);
+  background: var(--c-bg);
+  border-left: 4px solid var(--vc);
+  border-radius: 0 var(--r-s) var(--r-s) 0;
+  padding: 8px 12px;
+}
+
+.vote-btn {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  border-radius: var(--r-m);
+  background: linear-gradient(135deg, var(--c-primary) 0%, var(--c-primary-deep) 100%);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  box-shadow: 0 4px 14px rgba(255, 77, 109, 0.35);
+  transition: transform var(--dur-fast) var(--ease-spring), box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.vote-btn:active {
+  transform: scale(0.97);
+  box-shadow: 0 2px 8px rgba(255, 77, 109, 0.28);
+}
+
+.vote-btn.is-voted {
+  background: linear-gradient(135deg, var(--c-mint) 0%, #1FA89B 100%);
+  box-shadow: 0 4px 14px rgba(46, 196, 182, 0.35);
+}
+
+.venue-card__source {
+  align-self: center;
+  font-size: 12px;
+  color: var(--c-ink-soft);
+  padding: 4px 8px; /* 凑足触控热区，配合 base 的 a/button 44px 规则只作用于按钮 */
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.venue-card__source:hover { color: var(--c-primary); }

@@ -1,0 +1,48 @@
+/* ===== 设计 Tokens：四小十岁 · 生日派对选址投票 ===== */
+:root {
+  /* 色彩 */
+  --c-bg: #FFF6EE;
+  --c-surface: #FFFFFF;
+  --c-ink: #2B2140;
+  --c-ink-soft: #6B6280;
+  --c-line: #F0E4D8;
+  --c-primary: #FF4D6D;
+  --c-primary-deep: #E23155;
+  --c-amber: #FFB020;
+  --c-purple: #7C5CFF;
+  --c-mint: #2EC4B6;
+  --c-sky: #4D96FF;
+
+  /* 各方案主题色（按序号 1-5） */
+  --v1: #FF4D6D;
+  --v2: #7C5CFF;
+  --v3: #FF8A00;
+  --v4: #2EC4B6;
+  --v5: #4D96FF;
+
+  /* 字体 */
+  --font: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+
+  /* 圆角 / 阴影 */
+  --r-s: 10px;
+  --r-m: 16px;
+  --r-l: 24px;
+  --shadow-card: 0 4px 20px rgba(43, 33, 64, 0.08);
+  --shadow-pop: 0 8px 30px rgba(43, 33, 64, 0.16);
+
+  /* 间距 */
+  --gutter: 16px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+
+  /* 动效（只允许 transform / opacity） */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 160ms;
+  --dur-med: 320ms;
+
+  /* z-index 刻度 */
+  --z-card: 1;
+  --z-sticky: 10;
+  --z-overlay: 50;
+  --z-toast: 90;
+}

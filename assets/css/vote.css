@@ -1,0 +1,152 @@
+/* ===== 投票系统：实时战况 + 底部操作栏 + 投票按钮状态 ===== */
+/* 仅作用于 #results / #dock / .vote-btn 的状态类，不动共享层 */
+
+/* ---------- 实时战况 ---------- */
+.vote-results {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 4px 0 8px;
+}
+
+.vr-row {
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-m);
+  padding: 12px 14px;
+  box-shadow: var(--shadow-card);
+}
+
+.vr-row__top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.vr-row__badge {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.vr-row__emoji { font-size: 18px; line-height: 1; }
+
+.vr-row__name {
+  font-size: 14px;
+  font-weight: 700;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.vr-row__count {
+  flex: none;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--c-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.vr-row__bar-track {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--c-line);
+  overflow: hidden;
+}
+
+.vr-row__bar {
+  height: 100%;
+  border-radius: 999px;
+  transform-origin: left center;
+  transition: width var(--dur-med) var(--ease-out);
+}
+
+/* 投票瞬间的缩放脉冲（只作用 transform） */
+@keyframes vr-pulse {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.04, 1.6); }
+  100% { transform: scale(1); }
+}
+.vr-row__bar.is-pulse {
+  animation: vr-pulse var(--dur-med) var(--ease-spring);
+}
+
+/* 我投的那一行高亮 */
+.vr-row.is-mine {
+  border-color: var(--c-primary);
+  box-shadow: 0 4px 20px rgba(255, 77, 109, 0.18);
+}
+.vr-row.is-mine .vr-row__count { color: var(--c-primary); }
+
+/* 「演示数据」小字标注 */
+.vote-results__note {
+  font-size: 12px;
+  color: var(--c-ink-soft);
+  text-align: center;
+}
+
+/* ---------- 投票按钮状态（只追加 .is-voted，不覆盖基础样式） ---------- */
+.vote-btn.is-voted {
+  background: var(--c-mint);
+  border-color: var(--c-mint);
+  color: #fff;
+}
+
+/* ---------- 底部操作栏 ---------- */
+.dock {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: var(--z-sticky);
+  display: flex;
+  gap: 10px;
+  padding: 10px var(--gutter) calc(10px + var(--safe-bottom));
+  background: rgba(255, 246, 238, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-top: 1px solid var(--c-line);
+}
+.dock:empty { display: none; }
+
+.dock__btn {
+  flex: 1;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-radius: var(--r-m);
+  font-size: 15px;
+  font-weight: 700;
+  transition: transform var(--dur-fast) var(--ease-out), opacity var(--dur-fast) var(--ease-out);
+}
+.dock__btn:active { transform: scale(0.97); }
+
+.dock__btn--ghost {
+  background: var(--c-surface);
+  color: var(--c-ink);
+  border: 1px solid var(--c-line);
+  box-shadow: var(--shadow-card);
+}
+
+.dock__btn--primary {
+  background: var(--c-primary);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(255, 77, 109, 0.35);
+}
+
+@media (min-width: 640px) {
+  .dock { justify-content: center; }
+  .dock__btn { flex: 0 1 260px; }
+}
